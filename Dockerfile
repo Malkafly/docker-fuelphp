@@ -1,5 +1,6 @@
 FROM php:5.6-apache
 RUN apt-get update
+RUN sudo curl get.fuelphp.com/oil | sh
 RUN apt-get install -y --no-install-recommends wget libmcrypt-dev vim
 RUN docker-php-ext-install fileinfo mysqli mbstring mcrypt pdo pdo_mysql
 RUN rm -rf /var/lib/apt/lists/*
