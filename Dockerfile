@@ -18,15 +18,18 @@ RUN mv phpunit.phar /usr/local/bin/phpunit
 RUN mkdir /var/log/fuel
 RUN chmod 777 /var/log/fuel
 
+RUN cp /etc/apache2/apache2.conf /etc/apache2/apache2.org
+RUN cat /etc/apache2/apache2.conf | sed 's/\/var\/www\/html/\/var\/www\/html\/projects\/public/' > /etc/apache2/apache2.conf
+
+RUN a2enmod rewrite
+RUN a2enmod mpm_prefork
+
 WORKDIR /var/www/html
 RUN cd /var/www/html
 RUN oil create projects
 RUN cd projects
 RUN rm -rf .git .gitmodules *.md docs fuel/core fuel/packages
-RUN cp /etc/apache2/apache2.conf /etc/apache2/apache2.org
-RUN cat /etc/apache2/apache2.conf | sed 's/\/var\/www\/html/\/var\/www\/html\/projects\/public/' > /etc/apache2/apache2.conf
 
-RUN a2enmod rewrite
 RUN service apache2 restart
 
 EXPOSE 80
